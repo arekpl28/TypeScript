@@ -1,0 +1,3 @@
+tsc app.ts -w   --- automatic refreshing
+
+tsc --init -- all refreshing
