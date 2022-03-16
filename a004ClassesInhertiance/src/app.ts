@@ -1,45 +1,76 @@
-// type AddFn = (a: number, b: number) => number
-interface AddFn {
-  (a: number, b: number): number
+type Admin = {
+  name: string;
+  privilages: string[]
 }
 
-let add: AddFn;
-
-add = (n1: number, n2: number) => {
-  return n1 + n2
+type Employee = {
+  name: string
+  startDate: Date
 }
 
-interface Named {
-  name?: string;
-  outputName?: string;
+// interface ElevatedEmployee extends Employee, Admin { }
+
+type ElevatedEmployee = Admin & Employee;
+
+const e1: ElevatedEmployee = {
+  name: "Max",
+  privilages: ['create-server'],
+  startDate: new Date()
 }
 
-interface Greetable extends Named {
-  greet(phrase: string): void;
-}
+type Combinable = string | number;
+type Numeric = number | boolean;
 
-class Person implements Greetable {
-  name?: string;
-  age = 30
+type Universal = Combinable & Numeric;
 
-  constructor(n?: string) {
-    if (n) {
-      this.name = n
-    }
+function add(a: Combinable, b: Combinable) {
+  if (typeof a === 'string' || typeof b === 'string') {
+    return a.toString() + b.toString()
   }
+  return a + b
+}
 
-  greet(phrase: string) {
-    if (this.name) {
-      console.log(`${phrase} ${this.name}`)
-    } else {
-      console.log(`${phrase}`)
-    }
+type UnknowEmployee = Employee | Admin;
+
+function printEmployeeInformation(emp: UnknowEmployee) {
+  console.log('Name: ' + emp.name)
+  if ('privilages' in emp) {
+    console.log('Privilages: ' + emp.privilages)
+  }
+  if ('startDate' in emp) {
+    console.log('StartDate: ' + emp.startDate)
   }
 }
 
-let user1: Greetable;
+printEmployeeInformation(e1)
 
-user1 = new Person()
+class Car {
+  drive() {
+    console.log("Drive")
+  }
+}
 
-user1.greet('Hi there - I am')
-console.log(user1)
+
+class Truck {
+  drive() {
+    console.log("Drive Truck")
+  }
+  loadCargo(amount: number) {
+    console.log('Loading cargo... ' + amount)
+  }
+}
+
+type Vehicle = Car | Truck
+
+const v1 = new Car
+const v2 = new Truck
+
+function useVehicle(vehicle: Vehicle) {
+  vehicle.drive();
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(1000);
+  }
+}
+
+useVehicle(v1)
+useVehicle(v2)
